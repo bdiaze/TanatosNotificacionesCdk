@@ -26,7 +26,8 @@ namespace TanatosNotificacionesCdk
 			string notificacionLambdaMemorySize = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_MEMORY_SIZE") ?? throw new ArgumentNullException("NOTIFICACION_LAMBDA_MEMORY_SIZE");
 			string notificacionLambdaTimeout = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_TIMEOUT") ?? throw new ArgumentNullException("NOTIFICACION_LAMBDA_TIMEOUT");
 
-			string arnParameterDireccionDeDefecto = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_DIRECCION_DE_DEFECTO") ?? throw new ArgumentNullException("ARN_PARAMETER_DIRECCION_DE_DEFECTO");
+			string hermesDeNombre = System.Environment.GetEnvironmentVariable("HERMES_DE_NOMBRE") ?? throw new ArgumentNullException("HERMES_DE_NOMBRE");
+			string hermesDeCorreo = System.Environment.GetEnvironmentVariable("HERMES_DE_CORREO") ?? throw new ArgumentNullException("HERMES_DE_CORREO");
 			string arnParameterKairosExecutorPrefixRole = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE") ?? throw new ArgumentNullException("ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE");
 			string arnParameterKairosExecutorRoleArn = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN") ?? throw new ArgumentNullException("ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN");
 			string arnParameterHermesApiUrl = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_HERMES_API_URL") ?? throw new ArgumentNullException("ARN_PARAMETER_HERMES_API_URL");
@@ -103,7 +104,6 @@ namespace TanatosNotificacionesCdk
 									Resources = [
 										arnParameterHermesApiUrl,
 										arnParameterHermesApiKeyId,
-										arnParameterDireccionDeDefecto,
 									],
 								}),
 								new PolicyStatement(new PolicyStatementProps{
@@ -138,7 +138,8 @@ namespace TanatosNotificacionesCdk
 					{ "APP_NAME", appName },
 					{ "ARN_PARAMETER_HERMES_API_URL", arnParameterHermesApiUrl },
 					{ "ARN_PARAMETER_HERMES_API_KEY_ID", arnParameterHermesApiKeyId },
-					{ "ARN_PARAMETER_DIRECCION_DE_DEFECTO", arnParameterDireccionDeDefecto },
+					{ "HERMES_DE_NOMBRE", hermesDeNombre },
+					{ "HERMES_DE_CORREO", hermesDeCorreo },
 				},
 				Role = roleLambda,
 				DeadLetterQueueEnabled = true,

@@ -10,10 +10,15 @@ namespace LambdaNotificacion.Helpers {
 	internal class HermesHelper(VariableEntornoHelper variableEntorno, ParameterStoreHelper parameterStore, ApiKeyHelper apiKey) {
 		private readonly string _baseUrl = parameterStore.ObtenerParametro(variableEntorno.Obtener("ARN_PARAMETER_HERMES_API_URL")).Result;
 		private readonly string _xApiKey = apiKey.ObtenerApiKey(parameterStore.ObtenerParametro(variableEntorno.Obtener("ARN_PARAMETER_HERMES_API_KEY_ID")).Result).Result;
-		private readonly DireccionCorreo remitenteDefecto = JsonConvert.DeserializeObject<DireccionCorreo>(parameterStore.ObtenerParametro(variableEntorno.Obtener("ARN_PARAMETER_DIRECCION_DE_DEFECTO")).Result)!;
+
+		private readonly string _deNombre = variableEntorno.Obtener("HERMES_DE_NOMBRE");
+		private readonly string _deCorreo = variableEntorno.Obtener("HERMES_DE_CORREO");
 
 		public async Task<HermesRetorno> EnviarCorreo(HermesCorreo correo) {
-			correo.De ??= remitenteDefecto;
+			correo.De ??= new DireccionCorreo { 
+				Nombre = _deNombre,
+				Correo = _deCorreo
+			};
 
 			using HttpClient client = new(new RetryHandler(new HttpClientHandler()));
 			client.DefaultRequestHeaders.Add("x-api-key", _xApiKey);
