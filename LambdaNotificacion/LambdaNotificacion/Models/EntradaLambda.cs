@@ -8,6 +8,7 @@ namespace LambdaNotificacion.Models {
 	
 	public class EntradaLambda {
 		public required long IdNormaSuscrita { get; set; }
+		public required string Cron { get; set; }
 		public required bool ProgramarSiguienteEjecucion { get; set; }
 	}
 }
