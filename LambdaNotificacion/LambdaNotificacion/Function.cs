@@ -1,8 +1,10 @@
 using Amazon.APIGateway;
 using Amazon.Lambda.Core;
+using Amazon.SecretsManager;
 using Amazon.SimpleSystemsManagement;
 using LambdaNotificacion.Helpers;
 using LambdaNotificacion.Models;
+using LambdaNotificacion.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
@@ -22,16 +24,20 @@ public class Function
 			#region Singleton AWS Services
 			services.AddSingleton<IAmazonSimpleSystemsManagement, AmazonSimpleSystemsManagementClient>();
 			services.AddSingleton<IAmazonAPIGateway, AmazonAPIGatewayClient>();
+			services.AddSingleton<IAmazonSecretsManager, AmazonSecretsManagerClient>();
 			#endregion
 
 			#region Singleton Helpers
 			services.AddSingleton<VariableEntornoHelper>();
 			services.AddSingleton<ParameterStoreHelper>();
+			services.AddSingleton<SecretManagerHelper>();
 			services.AddSingleton<ApiKeyHelper>();
 			services.AddSingleton<HermesHelper>();
+			services.AddSingleton<ClientCredentialsHelper>();
 			#endregion
 
 			#region Singleton Repositories
+			services.AddSingleton<NormaSuscritaDao>();
 			#endregion
 		});
 
@@ -46,7 +52,7 @@ public class Function
 
 		LambdaLogger.Log(
 			$"[Function] - [FunctionHandler] - " +
-			$"Se inicia proceso de envio de notificaciones.");
+			$"Se inicia proceso de envio de notificaciones para norma suscrita con ID {input.IdNormaSuscrita} - Cron {input.Cron} - Programar Siguiente Ejecución: {input.ProgramarSiguienteEjecucion}.");
 
 		VariableEntornoHelper variableEntorno = serviceProvider.GetRequiredService<VariableEntornoHelper>();
 		HermesHelper hermesHelper = serviceProvider.GetRequiredService<HermesHelper>();
@@ -60,6 +66,8 @@ public class Function
 		LambdaLogger.Log(
 			$"[Function] - [FunctionHandler] - [{stopwatch.ElapsedMilliseconds} ms] - " +
 			$"Se obtendran las notificaciones a procesar.");
+
+
 
 		LambdaLogger.Log(
 			$"[Function] - [FunctionHandler] - [{stopwatch.ElapsedMilliseconds} ms] - " +
