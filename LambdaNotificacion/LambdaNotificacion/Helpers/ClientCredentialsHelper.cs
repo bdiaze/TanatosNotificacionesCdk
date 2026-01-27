@@ -24,14 +24,14 @@ namespace LambdaNotificacion.Helpers {
                 });
 
                 using HttpClient client = new(new RetryHandler(new HttpClientHandler()));
-                HttpResponseMessage response = await client.PostAsync(tokenUrl, content);
+                HttpResponseMessage response = await client.PostAsync(tokenUrl + "/oauth2/token", content);
                 if (!response.IsSuccessStatusCode) {
                     throw new Exception($"Ocurrió un error al obtener el access token - Status Code: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
                 }
 
-                Dictionary<string, object> dictResponse = JsonSerializer.Deserialize<Dictionary<string, object>>(await response.Content.ReadAsStringAsync())!;
+                Dictionary<string, JsonElement> dictResponse = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(await response.Content.ReadAsStringAsync())!;
 
-                value = (dictResponse["access_token"].ToString()!, DateTimeOffset.UtcNow.AddSeconds((int)dictResponse["expires_in"]));
+                value = (dictResponse["access_token"].GetString()!, DateTimeOffset.UtcNow.AddSeconds(dictResponse["expires_in"].GetInt32()!));
                 accessTokens[(tokenUrl, client_id, scopes)] = value!;
             }
 

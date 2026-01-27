@@ -22,14 +22,13 @@ jobs:
             NOTIFICACION_LAMBDA_MEMORY_SIZE: ${{ vars.NOTIFICACION_LAMBDA_MEMORY_SIZE }}
             NOTIFICACION_LAMBDA_TIMEOUT: ${{ vars.NOTIFICACION_LAMBDA_TIMEOUT }}
             
-            HERMES_DE_CORREO: ${{ vars.HERMES_DE_CORREO }}
-            HERMES_DE_NOMBRE: ${{ vars.HERMES_DE_NOMBRE }}
             ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE: ${{ vars.ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE }}
             ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN: ${{ vars.ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN }}
-            ARN_PARAMETER_HERMES_API_URL: ${{ vars.ARN_PARAMETER_HERMES_API_URL }}
-            ARN_PARAMETER_HERMES_API_KEY_ID: ${{ vars.ARN_PARAMETER_HERMES_API_KEY_ID }}
             
             NOTIFICATION_EMAILS: ${{ vars.NOTIFICATION_EMAILS }}
+            
+            ARN_PARAMETER_TANATOS_API_URL: ${{ vars.ARN_PARAMETER_TANATOS_API_URL }}
+            ARN_SECRET_TANATOS_API: ${{ vars.ARN_SECRET_TANATOS_API }}
                                     
         steps:
             - name: Checkout Repositorio

@@ -26,14 +26,13 @@ namespace TanatosNotificacionesCdk
 			string notificacionLambdaMemorySize = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_MEMORY_SIZE") ?? throw new ArgumentNullException("NOTIFICACION_LAMBDA_MEMORY_SIZE");
 			string notificacionLambdaTimeout = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_TIMEOUT") ?? throw new ArgumentNullException("NOTIFICACION_LAMBDA_TIMEOUT");
 
-			string hermesDeNombre = System.Environment.GetEnvironmentVariable("HERMES_DE_NOMBRE") ?? throw new ArgumentNullException("HERMES_DE_NOMBRE");
-			string hermesDeCorreo = System.Environment.GetEnvironmentVariable("HERMES_DE_CORREO") ?? throw new ArgumentNullException("HERMES_DE_CORREO");
 			string arnParameterKairosExecutorPrefixRole = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE") ?? throw new ArgumentNullException("ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE");
 			string arnParameterKairosExecutorRoleArn = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN") ?? throw new ArgumentNullException("ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN");
-			string arnParameterHermesApiUrl = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_HERMES_API_URL") ?? throw new ArgumentNullException("ARN_PARAMETER_HERMES_API_URL");
-			string arnParameterHermesApiKeyId = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_HERMES_API_KEY_ID") ?? throw new ArgumentNullException("ARN_PARAMETER_HERMES_API_KEY_ID");
-
+			
 			string notificationEmails = System.Environment.GetEnvironmentVariable("NOTIFICATION_EMAILS") ?? throw new ArgumentNullException("NOTIFICATION_EMAILS");
+
+			string arnParameterTanatosApiUrl = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_TANATOS_API_URL") ?? throw new ArgumentNullException("ARN_PARAMETER_TANATOS_API_URL");
+			string arnSecretTanatosApi = System.Environment.GetEnvironmentVariable("ARN_SECRET_TANATOS_API") ?? throw new ArgumentNullException("ARN_SECRET_TANATOS_API");
 
 			#region SNS Topic
 			// Se crea SNS topic para notificaciones...
@@ -79,9 +78,6 @@ namespace TanatosNotificacionesCdk
 				RemovalPolicy = RemovalPolicy.DESTROY
 			});
 
-			// Se obtiene ID de API Keys...
-			IStringParameter strParHermesApiKeyId = StringParameter.FromStringParameterArn(this, $"{appName}StringParameterHermesApiKeyId", arnParameterHermesApiKeyId);
-
 			// Creación de role para la función lambda...
 			Role roleLambda = new(this, $"{appName}NotificacionesLambdaRole", new RoleProps {
 				RoleName = $"{appName}NotificacionesLambdaRole",
@@ -102,17 +98,16 @@ namespace TanatosNotificacionesCdk
 										"ssm:GetParameter"
 									],
 									Resources = [
-										arnParameterHermesApiUrl,
-										arnParameterHermesApiKeyId,
+										arnParameterTanatosApiUrl,
 									],
 								}),
 								new PolicyStatement(new PolicyStatementProps{
-									Sid = $"{appName}AccessToApiKey",
+									Sid = $"{appName}AccessToSecretManager",
 									Actions = [
-										"apigateway:GET"
+										"secretsmanager:GetSecretValue"
 									],
 									Resources = [
-										$"arn:aws:apigateway:{this.Region}::/apikeys/{strParHermesApiKeyId.StringValue}",
+										arnSecretTanatosApi,
 									],
 								}),
 							]
@@ -136,10 +131,8 @@ namespace TanatosNotificacionesCdk
 				LogGroup = lambdaLogGroup,
 				Environment = new Dictionary<string, string> {
 					{ "APP_NAME", appName },
-					{ "ARN_PARAMETER_HERMES_API_URL", arnParameterHermesApiUrl },
-					{ "ARN_PARAMETER_HERMES_API_KEY_ID", arnParameterHermesApiKeyId },
-					{ "HERMES_DE_NOMBRE", hermesDeNombre },
-					{ "HERMES_DE_CORREO", hermesDeCorreo },
+					{ "ARN_PARAMETER_TANATOS_API_URL", arnParameterTanatosApiUrl },
+					{ "ARN_SECRET_TANATOS_API", arnSecretTanatosApi },
 				},
 				Role = roleLambda,
 				DeadLetterQueueEnabled = true,
