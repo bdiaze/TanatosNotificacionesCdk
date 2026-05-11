@@ -122,7 +122,7 @@ namespace TanatosNotificacionesCdk
 			Function function = new(this, $"{appName}NotificacionesLambdaFunction", new FunctionProps {
 				FunctionName = $"{appName}Notificaciones",
 				Description = $"Lambda encargada de enviar las notificaciones de la aplicacion {appName}",
-				Runtime = Runtime.DOTNET_8,
+				Runtime = Runtime.DOTNET_10,
 				Handler = notificacionLambdaHandler,
 				Code = Code.FromAsset($"{notificacionLambdaDirectory}/publish/publish.zip"),
 				Timeout = Duration.Seconds(double.Parse(notificacionLambdaTimeout)),
