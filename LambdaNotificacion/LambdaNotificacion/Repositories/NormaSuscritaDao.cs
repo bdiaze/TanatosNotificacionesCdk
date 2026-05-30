@@ -1,5 +1,4 @@
 ﻿using LambdaNotificacion.Helpers;
-using LambdaNotificacion.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +24,11 @@ namespace LambdaNotificacion.Repositories {
 			"api/templates.read.public"
 		];
 
-		public async Task ProcesarNotificacion(EntradaLambda entrada) {
+		public async Task ProcesarNotificacion(string rawJson) {
             using HttpClient client = new(new RetryHandler(new HttpClientHandler()));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await clientCredentialsHelper.ObtenerAccessToken(_cognitoBaseUrl, _notificacionesClientId, _notificacionesClientSecret, _notificacionesScopes));
 
-            HttpResponseMessage response = await client.PostAsync(_baseUrl + "/NormaSuscrita/ProcesarNotificacion", new StringContent(JsonSerializer.Serialize(entrada), Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await client.PostAsync(_baseUrl + "/NormaSuscrita/ProcesarNotificacion", new StringContent(rawJson, Encoding.UTF8, "application/json"));
 			if (!response.IsSuccessStatusCode) {
 				throw new HttpRequestException(
 					$"Ocurrió un error al procesar la notificación. StatusCode: {response.StatusCode} - Content: {await response.Content.ReadAsStringAsync()}",
