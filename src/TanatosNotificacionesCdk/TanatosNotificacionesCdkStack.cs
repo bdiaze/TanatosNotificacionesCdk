@@ -18,21 +18,20 @@ namespace TanatosNotificacionesCdk
     {
         internal TanatosNotificacionesCdkStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
         {
-			string appName = System.Environment.GetEnvironmentVariable("APP_NAME") ?? throw new ArgumentNullException("APP_NAME");
-			string region = System.Environment.GetEnvironmentVariable("REGION_AWS") ?? throw new ArgumentNullException("REGION_AWS");
-
-			string notificacionLambdaDirectory = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_DIRECTORY") ?? throw new ArgumentNullException("NOTIFICACION_LAMBDA_DIRECTORY");
-			string notificacionLambdaHandler = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_HANDLER") ?? throw new ArgumentNullException("NOTIFICACION_LAMBDA_HANDLER");
-			string notificacionLambdaMemorySize = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_MEMORY_SIZE") ?? throw new ArgumentNullException("NOTIFICACION_LAMBDA_MEMORY_SIZE");
-			string notificacionLambdaTimeout = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_TIMEOUT") ?? throw new ArgumentNullException("NOTIFICACION_LAMBDA_TIMEOUT");
-
-			string arnParameterKairosExecutorPrefixRole = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE") ?? throw new ArgumentNullException("ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE");
-			string arnParameterKairosExecutorRoleArn = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN") ?? throw new ArgumentNullException("ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN");
+			string appName = System.Environment.GetEnvironmentVariable("APP_NAME") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno APP_NAME");
 			
-			string notificationEmails = System.Environment.GetEnvironmentVariable("NOTIFICATION_EMAILS") ?? throw new ArgumentNullException("NOTIFICATION_EMAILS");
+			string notificacionLambdaDirectory = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_DIRECTORY") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno NOTIFICACION_LAMBDA_DIRECTORY");
+			string notificacionLambdaHandler = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_HANDLER") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno NOTIFICACION_LAMBDA_HANDLER");
+			string notificacionLambdaMemorySize = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_MEMORY_SIZE") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno NOTIFICACION_LAMBDA_MEMORY_SIZE");
+			string notificacionLambdaTimeout = System.Environment.GetEnvironmentVariable("NOTIFICACION_LAMBDA_TIMEOUT") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno NOTIFICACION_LAMBDA_TIMEOUT");
 
-			string arnParameterTanatosApiUrl = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_TANATOS_API_URL") ?? throw new ArgumentNullException("ARN_PARAMETER_TANATOS_API_URL");
-			string arnSecretTanatosApi = System.Environment.GetEnvironmentVariable("ARN_SECRET_TANATOS_API") ?? throw new ArgumentNullException("ARN_SECRET_TANATOS_API");
+			string arnParameterKairosExecutorPrefixRole = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno ARN_PARAMETER_KAIROS_EXECUTOR_PREFIX_ROLE");
+			string arnParameterKairosExecutorRoleArn = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno ARN_PARAMETER_KAIROS_EXECUTOR_ROLE_ARN");
+			
+			string notificationEmails = System.Environment.GetEnvironmentVariable("NOTIFICATION_EMAILS") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno NOTIFICATION_EMAILS");
+
+			string arnParameterTanatosApiUrl = System.Environment.GetEnvironmentVariable("ARN_PARAMETER_TANATOS_API_URL") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno ARN_PARAMETER_TANATOS_API_URL");
+			string arnSecretTanatosApi = System.Environment.GetEnvironmentVariable("ARN_SECRET_TANATOS_API") ?? throw new InvalidOperationException("No se ha configurado la variable de entorno ARN_SECRET_TANATOS_API");
 
 			#region SNS Topic
 			// Se crea SNS topic para notificaciones...
