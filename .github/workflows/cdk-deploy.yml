@@ -45,7 +45,7 @@ jobs:
                   node-version: ${{ vars.VERSION_NODEJS }}
                                                       
             - name: Instalar AWS CDK
-              run: npm install -g aws-cdk
+              run: npm install --ignore-scripts -g aws-cdk@2.1125.0
               
             - name: Publish .NET Lambda
               working-directory: ${{ vars.NOTIFICACION_LAMBDA_DIRECTORY }}

@@ -17,7 +17,7 @@ namespace LambdaNotificacion.Helpers {
 				});
 
 				if (response == null || response.Parameter == null) {
-					throw new Exception("No se pudo rescatar correctamente el parámetro");
+					throw new InvalidOperationException($"No se pudo rescatar correctamente el parámetro: {parameterArn}");
 				}
 
 				value = response.Parameter.Value!;

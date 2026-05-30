@@ -26,7 +26,11 @@ namespace LambdaNotificacion.Helpers {
                 using HttpClient client = new(new RetryHandler(new HttpClientHandler()));
                 HttpResponseMessage response = await client.PostAsync(tokenUrl + "/oauth2/token", content);
                 if (!response.IsSuccessStatusCode) {
-                    throw new Exception($"Ocurrió un error al obtener el access token - Status Code: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
+                    throw new HttpRequestException(
+                        $"Ocurrió un error al obtener el access token - Status Code: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}",
+						inner: null,
+						statusCode: response.StatusCode
+                    );
                 }
 
                 Dictionary<string, JsonElement> dictResponse = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(await response.Content.ReadAsStringAsync())!;

@@ -31,7 +31,11 @@ namespace LambdaNotificacion.Repositories {
 
             HttpResponseMessage response = await client.PostAsync(_baseUrl + "/NormaSuscrita/ProcesarNotificacion", new StringContent(JsonSerializer.Serialize(entrada), Encoding.UTF8, "application/json"));
 			if (!response.IsSuccessStatusCode) {
-				throw new Exception($"Ocurrió un error al procesar la notificación. StatusCode: {response.StatusCode} - Content: {await response.Content.ReadAsStringAsync()}");
+				throw new HttpRequestException(
+					$"Ocurrió un error al procesar la notificación. StatusCode: {response.StatusCode} - Content: {await response.Content.ReadAsStringAsync()}",
+					inner: null,
+					statusCode: response.StatusCode
+				);
 			}
 		}
     }

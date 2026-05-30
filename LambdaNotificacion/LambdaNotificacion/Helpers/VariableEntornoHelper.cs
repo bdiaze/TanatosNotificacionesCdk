@@ -10,9 +10,9 @@ namespace LambdaNotificacion.Helpers {
 	internal class VariableEntornoHelper(IHostEnvironment env, IConfiguration config) {
 		public string Obtener(string nombre) {
 			if (env.IsDevelopment()) {
-				return config[$"VariableEntorno:{nombre}"] ?? throw new Exception($"Debes agregar el atributo VariableEntorno > {nombre} en el archivo appsettings.Development.json para ejecutar localmente.");
+				return config[$"VariableEntorno:{nombre}"] ?? throw new InvalidOperationException($"Debes agregar el atributo VariableEntorno > {nombre} en el archivo appsettings.Development.json para ejecutar localmente.");
 			}
-			return Environment.GetEnvironmentVariable(nombre) ?? throw new Exception($"No se ha configurado la variable de entorno {nombre}.");
+			return Environment.GetEnvironmentVariable(nombre) ?? throw new InvalidOperationException($"No se ha configurado la variable de entorno {nombre}.");
 		}
 	}
 }
